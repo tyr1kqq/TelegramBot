@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TelegramBot.Models
 {
-    internal class Session
+    public class Session
     {
-        public string LangugeCode { get; set;}
+        public string LanguageCode { get; set; }
     }
+
 }
