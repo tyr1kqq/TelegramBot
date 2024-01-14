@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
-using TelegramBot.Configuration;
-using TelegramBot.Controlers;
-using VoiceTexterBot.Controlers;
+using VoiceTexterBot.Configuration;
+using VoiceTexterBot.Controllers;
 using VoiceTexterBot.Services;
 
-namespace TelegramBot
+namespace VoiceTexterBot
 {
     public class Program
     {
@@ -27,36 +26,39 @@ namespace TelegramBot
             // Запускаем сервис
             await host.RunAsync();
             Console.WriteLine("Сервис остановлен");
-
-
         }
 
         static AppSettings BuildAppSettings()
         {
             return new AppSettings()
             {
-                BotToken = "6750819365:AAFd5bOCZ8AFvecbGSIeEusF4hfEVAmq_SM"
+                DownloadsFolder = "C:\\Users\\tyr1k_qq\\Downloads",
+                BotToken = "6750819365:AAFd5bOCZ8AFvecbGSIeEusF4hfEVAmq_SM",
+                AudioFileName = "audio",
+                InputAudioFormat = "ogg",
             };
         }
 
 
         static void ConfigureServices(IServiceCollection services)
         {
-
             AppSettings appSettings = BuildAppSettings();
             services.AddSingleton(BuildAppSettings());
-            // Подключаем контроллеры сообщений и кнопок 
-            services.AddTransient<DefaultMessageControler>();
-            services.AddTransient<InlineKeyboardControler>();
+
+            services.AddSingleton<IStorage, MemoryStorage>();
+
+            // Подключаем контроллеры сообщений и кнопок
+            services.AddTransient<DefaultMessageController>();
+            services.AddTransient<VoiceMessageController>();
             services.AddTransient<TextMessageController>();
-            services.AddTransient<VoiceMessageControler>();
+            services.AddTransient<InlineKeyboardController>();
+            services.AddSingleton<IFileHandler, AudioFileHandler>();
 
-            services.AddSingleton<IStorage , MemoryStorage>();
-
-            // Регистрируем объект TelegramBotClient c токеном подключения
-            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("6750819365:AAFd5bOCZ8AFvecbGSIeEusF4hfEVAmq_SM"));
-            // Регистрируем постоянно активный сервис бота
+            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(appSettings.BotToken));
             services.AddHostedService<Bot>();
         }
+
+
+
     }
 }
