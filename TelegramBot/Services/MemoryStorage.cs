@@ -10,6 +10,7 @@ namespace VoiceTexterBot.Services
         /// </summary>
         private readonly ConcurrentDictionary<long, Session> _sessions;
 
+
         public MemoryStorage()
         {
             _sessions = new ConcurrentDictionary<long, Session>();

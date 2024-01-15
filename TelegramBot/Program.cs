@@ -35,6 +35,7 @@ namespace VoiceTexterBot
                 DownloadsFolder = "C:\\Users\\tyr1k_qq\\Downloads",
                 BotToken = "6750819365:AAFd5bOCZ8AFvecbGSIeEusF4hfEVAmq_SM",
                 AudioFileName = "audio",
+                OutputAudioFormat = "wav",
                 InputAudioFormat = "ogg",
             };
         }
